@@ -24,10 +24,14 @@ class _calculationState extends State<calculation>
   num zpos = 0;                                                       // Z position
   double t1 = 0;
   double t2 = 0;
+  Complex rctop = Complex(re:0 , im:0);              // RC in rectangular form Radian Mode
+  Complex rcbtm = Complex(re:0 , im:0);
   double rcvaluearg = 0;
   double rcvaluemod = 0;
   num tanbl = 0;
   Complex a = Complex(re:0 , im:0);                       // RC in rectangular form Radian Mode
+  Complex e = Complex(re:0 , im:0);                       // RC in rectangular form Radian Mode
+  Complex f = Complex(re:0 , im:0);                       // RC in rectangular form Radian Mode
   num b = 0;                                                              // RC mod in polar form
   num c = 0;                                                              // RC angle in polar form
   Complex d = Complex(re:0 , im:0);                       // Zin in rectangular form Radian Mode
@@ -232,7 +236,9 @@ class _calculationState extends State<calculation>
                   // _validateUserInput(controller10.text);
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context)=>rcPage( Rzl:Rzl ,  Izl:Izl , Rzo:Rzo , Izo:Izo  , zlvalue:zlvalue , zovalue: zovalue ,  t1:t1 , t2:t2 , rcvaluemod:rcvaluemod, rcvaluearg:rcvaluearg ,  a:a, b:b ,c:c),),);
+                      builder: (context)=>rcPage( Rzl:Rzl ,  Izl:Izl , Rzo:Rzo , Izo:Izo  , zlvalue:zlvalue , zovalue: zovalue ,  t1:t1 , t2:t2 ,
+                          rcvaluemod:rcvaluemod, rcvaluearg:rcvaluearg ,  a:a, b:b ,c:c , rctop:rctop , rcbtm:rcbtm , e:e , f:f , zpos:zpos ,
+                          beta:beta , ),),);
                 },
                 child: Text('Reflection Coefficient'),
               ),
@@ -250,7 +256,8 @@ class _calculationState extends State<calculation>
                   // _validateUserInput(controller10.text);
                   Navigator.of(context).push(
                     MaterialPageRoute(
-                      builder: (context)=>zInPage( Rzl:Rzl ,  Izl:Izl , Rzo:Rzo , Izo:Izo  , zlvalue:zlvalue , zovalue: zovalue , beta:beta , zpos:zpos , zin:zin , d:d, j:j ,  tanbl:tanbl ),),);
+                      builder: (context)=>zInPage( Rzl:Rzl ,  Izl:Izl , Rzo:Rzo , Izo:Izo  , zlvalue:zlvalue , zovalue: zovalue , beta:beta , zpos:zpos ,
+                          zin:zin , d:d, j:j ,  tanbl:tanbl ),),);
                 },
                 child: Text('Input Impedance @ Z'),
               ),
@@ -271,12 +278,16 @@ class _calculationState extends State<calculation>
         Izo = double.parse(controller4.text);
         final zlvalue = Complex(re:Rzl , im:Izl) ;
         final zovalue = Complex(re:Rzo , im:Izo) ;
-        final rcvalue = ((zlvalue)-(zovalue))/((zlvalue)+(zovalue));
+        final rctop = ((zlvalue)-(zovalue));
+        final rcbtm = ((zlvalue)+(zovalue));
+        final rcvalue = rctop/rcbtm;
         final rcvaluemod = rcvalue.module;
         final rcvaluearg = rcvalue.argument;
         a = rcvalue;
         b = rcvaluemod;
         c = rcvaluearg;
+        e = rctop;
+        f = rcbtm;
 
       });
     }
